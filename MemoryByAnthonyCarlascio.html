@@ -1,0 +1,364 @@
+﻿<!DOCTYPE html>
+<!--Author: Anthony Carlascio-->
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width , initial scale=1.0" />
+    <title>Memory by Anthony Carlascio</title>
+    <style>
+        table {
+            border: 2px solid white;
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        td {
+            border: 1px solid white;
+            text-align: center;
+            padding: 5px;
+        }
+
+        body {
+            background-color: blue;
+            text-align: center;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+    </style>
+    <script>
+
+        var myArr = [];
+        //var Arr = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "twentyone", "twentytwo", "twentythree", "twentyfour", "twentyfive", "twentysix", "twnetyseven", "twentyeight", "twentynine", "thirty", "thirtyone", "thirtytwo", "thirtythree", "thirtyfour", "thirtysix"];
+        var arrayImage = ["ball.png", "barbell.png", "birthday.png", "bows.png", "boxer.png", "business_hound.png", "cocktail.png", "corgi.png", "dachshund.png", "dalmatian.png", "einstein.png", "haski.png", "poodle.png", "pilot.png", "pug.png", "shepherd.png", "sleeping_bulldog.png", "sharpei.png"];
+        var arrayImage2 = [];
+        var validArray = [];
+        var checker;
+        var checker1 = 0;
+        var checker2 = 0;
+        var c = 0;
+        var def;
+        var d1;
+        var d2;
+
+        function fRoll() {
+            var i = 0;
+            var j = 0;
+            var counter = 0;
+            var temp;
+            arrayImage2 = fRand(arrayImage);
+
+            for (i = 0; i <= 17; i++) {
+                myArr[i] = i;
+            }
+
+            for (i = 18; i <= 35; i++) {
+                myArr[i] = j;
+                j++;
+            }
+
+            fRand(myArr);
+            /*for (j = 0; j < 36; j++) {
+
+                temp = Math.floor(Math.random() * 18) + 1;
+
+                for (i = 0; i < 36; i++) {
+                    if (parseInt(myArr[i]) == temp) {
+                        counter = counter + 1;
+                    }
+                    if (counter == 3) {
+                        counter = 0;
+                        temp = Math.floor(Math.random() * 18) + 1;
+                        i = 0;
+                    }
+
+                }
+                //arrayImage2.push(arrayImage[temp]);
+                myArr.push(temp);
+            }*/
+
+        }
+
+        function fRand(ar) {
+            var count = ar.length;
+            var b;
+            var temp;
+
+            while (count > 0) {
+                b = Math.floor(Math.random() * count);
+                count = count - 1;
+
+                temp = ar[count];
+                ar[count] = ar[b];
+                ar[b] = temp;
+            }
+
+            return ar;
+        }
+
+        //where val is a number 0-35 and ele is this
+        function fCheck(val, ele) {
+            var p = myArr[val];
+            //var g = ele.src;
+            var x;
+            var y = 0;
+
+            for (x = 0; x <= validArray.length; x++) {
+                if (validArray[x] == p) {
+                    y = y + 1;
+                }
+            }
+
+            if (y < 1) {
+
+                //ele.src = arrayImage2[p];
+                //g = arrayImage2[p];
+                //ele.disabled = true;
+                c++;
+
+                if (checker1 === 0) {
+                    checker1 = p;
+                    checker = ele;
+                    d1 = ele.disabled;
+                    d1 = true;
+                    checker.src = arrayImage2[p];
+                    checker.disabled = true;
+                }
+                else {
+                    checker2 = p;
+                    d2 = ele.disabled;
+                    d2 = true;
+                    def = ele;
+                    def.src = arrayImage2[p];
+                    def.disabled = true;
+                }
+
+                if (c === 2) {
+                    //fPause(1500);
+                    if (checker1 === checker2) {
+                        c = 0;
+                        fValid(checker1);
+                    }
+                    else if (c > 2) {
+                        //fPause(1500);
+                        fReset(checker, def);
+                    }
+                    else if (checker1 != checker2) {
+                        var h = ele;
+                        h.src = arrayImage2[p];
+                        c = 0;
+                        //fPause(1500);
+                        fWrong(checker, h, p);
+                    }
+                  
+                }
+            }
+            else
+                document.getElementById("display").innerHTML = "Invalid choice";
+        }
+
+        /*function fPause(ms) {
+            var t = new Date();
+            var d = '';
+            do {
+                d = new Date();
+            } while (d - t < ms);
+        }*/
+
+        function fPause(ele1, ele2) {
+            setTimeout(fReset(ele1, ele2), ms);
+            
+        }
+
+        function fValid(val) {
+            //this function will be passed from fCheck to keep the correct images displayed instead of bark
+            document.getElementById("display").innerHTML = "Correct!";
+            validArray.push(val);
+            c = 0;
+            if (validArray.length > 17) {
+                fVictory();
+            }
+
+            //If possible make the buttons not able to click anymore
+            checker1 = 0;
+            checker2 = 0;
+        }
+
+        function fWrong(ele1, ele2, val) {
+            //this function will be passed from fCheck to reset the values to 0 and to once again display bark
+            ele2.src = arrayImage2[val];
+            //while (ele2.src = arrayImage2[val]) { fPause(1000); break; }
+            
+            //send Incorrect to the text area
+            document.getElementById("display").innerHTML = "Wrong!";
+
+            
+            
+            
+
+            fPause(ele1, ele2, 1500);
+            
+           // setTimeout(fReset(ele1, ele2) , 1500);
+            //fPause(1500);
+            //setTimeout(1500);
+            fReset(ele1, ele2);
+        }
+
+        function fReset(ele1, ele2) {
+            c = 0;
+            checker1 = 0;
+            checker2 = 0;
+            ele1.disabled = false;
+            ele2.disabled = false;
+            ele1.src = "bark.png"
+            ele2.src = "bark.png"
+        }
+
+        function fVictory() {
+            document.getElementById("display").innerHTML = "Congratulations! You have won!";
+            fPause(3000);
+            location.reload();
+
+        }
+
+    </script>
+</head>
+<body onload="fRoll()">
+<h1>Memory by Anthony Carlascio</h1>
+    <hr >
+    <br><br>
+         <table>
+             <tr>
+                 <td id="one">
+                     <input type="image" src="bark.png" onclick="fCheck(0, this)" alt="Pupperino"/>
+                 </td>
+                 <td id="two">
+                     <input type="image" src="bark.png"  onclick="fCheck(1, this)" alt="Pupperino" />
+                 </td>
+                 <td id="three">
+                     <input type="image" src="bark.png"  onclick="fCheck(2, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="four">
+                     <input type="image" src="bark.png"  onclick="fCheck(3, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="five">
+                     <input type="image" src="bark.png"  onclick="fCheck(4, this)" alt="Pupperino" />
+                 </td>
+                 <td id="six">
+                     <input type="image" src="bark.png"  onclick="fCheck(5, this)" alt="Pupperino"/>
+                 </td>
+             </tr>
+             <tr>
+                 <td id="seven"> 
+                     <input type="image" src="bark.png"  onclick="fCheck(6, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="eight">
+                     <input type="image" src="bark.png"  onclick="fCheck(7, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="nine">
+                     <input type="image" src="bark.png"  onclick="fCheck(8, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="ten">
+                     <input type="image" src="bark.png"  onclick="fCheck(9, this)" alt="Pupperino" />
+                 </td>
+                 <td id="thirtysix">
+                     <input type="image" src="bark.png"  onclick="fCheck(35, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="eleven">
+                     <input type="image" src="bark.png"  onclick="fCheck(10, this)" alt="Pupperino" />
+                 </td>
+             </tr>
+             <tr>
+                 <td id="twelve">
+                     <input type="image" src="bark.png"  onclick="fCheck(11, this)" alt="Pupperino" />
+                 </td>
+                 <td id="thirteen">
+                     <input type="image" src="bark.png"  onclick="fCheck(12, this)" alt="Pupperino" />
+                 </td>
+                 <td id="fourteen">
+                     <input type="image" src="bark.png"  onclick="fCheck(13, this)" alt="Pupperino" />
+                 </td>
+                 <td id="fifteen">
+                     <input type="image" src="bark.png"  onclick="fCheck(14, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="sixteen">
+                     <input type="image" src="bark.png"  onclick="fCheck(15, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="seventeen">
+                     <input type="image" src="bark.png"  onclick="fCheck(16, this)"  alt="Pupperino"/>
+                 </td>
+             </tr>
+             <tr>
+                 <td id="eighteen">
+                     <input type="image" src="bark.png"  onclick="fCheck(17, this)" alt="Pupperino" />
+                 </td>
+                 <td id="nineteen">
+                     <input type="image" src="bark.png"  onclick="fCheck(18, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="twenty">
+                     <input type="image" src="bark.png"  onclick="fCheck(19, this)" alt="Pupperino" />
+                 </td>
+                 <td id="twentyone">
+                     <input type="image" src="bark.png"  onclick="fCheck(20, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="twentytwo">
+                     <input type="image" src="bark.png"  onclick="fCheck(21, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="twentythree">
+                     <input type="image" src="bark.png"  onclick="fCheck(22, this)"  alt="Pupperino"/>
+                 </td>
+             </tr>
+             <tr>
+                 <td id="twentyfour">
+                     <input type="image" src="bark.png"  onclick="fCheck(23, this)" alt="Pupperino" />
+                 </td>
+                 <td id="twentyfive">
+                     <input type="image" src="bark.png"  onclick="fCheck(24, this)"  alt="Pupperino"/>
+                 </td>
+                 <td id="twentysix">
+                     <input type="image" src="bark.png"  onclick="fCheck(25, this)" alt="Pupperino"/>
+                 </td>
+                 <td id="twentyseven">
+                     <input type="image" src="bark.png"  onclick="fCheck(26, this)" alt="Pupperino"/>
+                 </td>
+                 <td id="twentyeight">
+                     <input type="image" src="bark.png"  onclick="fCheck(27, this)" alt="Pupperino"/>
+                 </td>
+                 <td id="twentynine">
+                     <input type="image" src="bark.png"  onclick="fCheck(28, this)" alt="Pupperino"/>
+                 </td>
+             </tr>
+             <tr>
+                 <td id="thirty">
+                     <input type="image" src="bark.png"  onclick="fCheck(29, this)" alt="Pupperino"/>
+                 </td>
+                 <td id="thirtyone">
+                     <input type="image" src="bark.png"  onclick="fCheck(30, this)" alt="Pupperino"/>
+                 </td>
+                 <td id="thirtytwo">
+                     <input type="image" src="bark.png"  onclick="fCheck(31, this)" alt="Pupperino"/>
+                 </td>
+                 <td id="thirtythree">
+                     <input type="image" src="bark.png"  onclick="fCheck(32, this)" alt="Pupperino"/>
+                 </td>
+                 <td id="thirtyfour">
+                     <input type="image" src="bark.png"  onclick="fCheck(33, this)" alt="Pupperino"/>
+                 </td>
+                 <td id="thirtyfive">
+                     <input type="image" src="bark.png" onclick="fCheck(34, this)"  alt="Pupperino"/>
+                 </td>
+             </tr>
+         </table>
+    <br>
+    <br>
+    <h2 id="display"></h2>
+   <!--Put a text area here to send messages indicating correct or incorrect-->
+</body>
+</html>
